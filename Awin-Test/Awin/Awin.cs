@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 
 namespace Awin_Test
 {
@@ -68,6 +69,13 @@ namespace Awin_Test
                 var accountId = Accounts().accounts.FirstOrDefault().accountId;
                 var request = Request($"publishers/{accountId}/programmes?relationship=joined", Method.GET);
                 var queryResult = client.Execute<List<Programme>>(request).Data;
+
+                foreach (var item in queryResult)
+                {
+                    item.Detail = ProgrammeDetails(item.id);
+
+                    Thread.Sleep(10000);
+                }
 
                 return queryResult;
             }
